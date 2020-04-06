@@ -4,9 +4,10 @@
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
+ * borderperc: percentage of cell width to use as a border
  */
 static char *font = "FreeMono:pixelsize=22:antialias=true:autohint=true";
-static int borderpx = 2;
+int borderperc = 50;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -83,12 +84,13 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* bg opacity */
-float alpha = 0.97;
+float alpha = 0.85;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	  /* 8 normal colors */
-      [0] = "#1d2021", /* hard contrast: #1d2021 / soft contrast: #32302f */ /*282828*/
+      //[0] = "#1d2021", /* hard contrast: #1d2021 / soft contrast: #32302f */ /*282828*/
+      [0] = "#000000",
       [1] = "#cc241d", /* red     */
       [2] = "#98971a", /* green   */
       [3] = "#d79921", /* yellow  */
@@ -160,17 +162,28 @@ static uint forcemousemod = ShiftMask;
  */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
-	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
+	{ ShiftMask,            Button4, kscrollup,      {.i = 5} },
+	{ ShiftMask,            Button5, kscrolldown,    {.i = 5} },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
 
-/*static char *openurlcmd[] = { "/bin/sh", "-c", "urlview", "externalpipe", NULL }; */
-static char *openurlcmd[] = { "/bin/sh", "-c",
-    "sed 's/.*│//g' | tr -d '\n' | grep -aEo '(((http|https)://|www\\.)[a-zA-Z0-9.]*[:]?[a-zA-Z0-9./@&%?$#=_-]*)|((magnet:\\?xt=urn:btih:)[a-zA-Z0-9]*)'| uniq | sed 's/^www./http:\\/\\/www\\./g' | dmenu -w $(xdotool getactivewindow) -i -p 'Follow which url?' -l 10 | xargs -r xdg-open",
-    "externalpipe", NULL };
+/* static char *openurlcmd[] = { "/bin/sh", "-c", "st -e urlview /home/ray/test", "externalpipe", NULL }; */
+
+//static char *openurlcmd[] = { "/bin/sh", "-c", "tee /home/ray/.urls && st -w 2 -e urlview /home/ray/.urls", "externalpipe", NULL };
+
+//static char *openurlcmd[] = { "/bin/sh", "-c", "tee /home/ray/.urls && st -w $(xdotool getactivewindow) -e urlview /home/ray/.urls", "externalpipe", NULL };
+
+//static char *openurlcmd[] = { "/bin/sh", "-c", "tee /home/ray/.urls && urlview /home/ray/.urls", "externalpipe", NULL };
+//static char *openurlcmd[] = { "/bin/sh", "-c", "tee /home/ray/.urls && st -e urlview /home/ray/.urls", "externalpipe", NULL };
+
+//static char *openurlcmd[] = { "/bin/sh", "-c", "tee /home/ray/.urls && st -e /home/ray/scripts/followurls", "externalpipe", NULL };
+
+static char *storescreen[] = { "/bin/sh", "-c", "tee /home/ray/.screen", "externalpipe", NULL };
+/*static char *openurlcmd[] = { "/bin/sh", "-c",
+    "sed 's/.*│//g' | tr -d '\n' | grep -aEo '(((http|https)://|www\\.)[a-zA-Z0-9.]*[:]?[a-zA-Z0-9./@&%?$#=_-]*)|((magnet:\\?xt=urn:btih:)[a-zA-Z0-9]*)'| uniq | sed 's/^www./http:\\/\\/www\\./g' | dmenu -i -p 'Follow which url?' -l 10 | xargs -r xdg-open",
+    "externalpipe", NULL }; */
 
 /* Internal keyboard shortcuts. */
 #define MODKEY Mod1Mask
@@ -178,7 +191,7 @@ static char *openurlcmd[] = { "/bin/sh", "-c",
 
 static Shortcut shortcuts[] = {
 	/* mask                 keysym          function        argument */
-    { ControlMask,          XK_u,           externalpipe,   {.v = openurlcmd } },
+    { ControlMask,          XK_u,           externalpipe,   {.v = storescreen } },
 	{ XK_ANY_MOD,           XK_Break,       sendbreak,      {.i =  0} },
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },

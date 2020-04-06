@@ -1,19 +1,7 @@
 --- st.h
 +++ st.h
-@@ -231,7 +231,6 @@ extern char *opt_line;
- extern char *opt_name;
- extern char *opt_title;
- extern int oldbutton;
--int borderpx;
- 
- extern char *usedfont;
- extern double usedfontsize;
-@@ -239,7 +238,7 @@ extern double defaultfontsize;
- 
- /* config.h globals */
- extern char font[];
--extern int borderperc;
-+extern int borderpx;
- extern float cwscale;
- extern float chscale;
- extern unsigned int doubleclicktimeout;
+@@ -129,3 +138,4 @@ extern char *termname;
+ extern unsigned int tabspaces;
+ extern unsigned int defaultfg;
+ extern unsigned int defaultbg;
++extern const int boxdraw, boxdraw_bold, boxdraw_braille;
