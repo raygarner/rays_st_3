@@ -20,6 +20,9 @@ static char *argv0;
 #include "st.h"
 #include "win.h"
 
+//ADDED BY RAY FOR BUG FIX (ORIGNINALLY IN st.h)
+int borderpx;
+
 /* types used in config.h */
 typedef struct {
 	uint mod;
